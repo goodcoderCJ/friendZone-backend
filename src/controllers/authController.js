@@ -14,7 +14,7 @@ const signIn = async (req, res) => {
     const passwordCompare = bcryptjs.compare(password, fetchedUser.password);
 
     if (fetchedUser && passwordCompare) {
-      const token = generateJwt(fetchedUser.id);
+      const token = generateJwt(fetchedUser._id);
       res.cookie("usertoken", token, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
@@ -22,10 +22,11 @@ const signIn = async (req, res) => {
       res
         .status(200)
         .json({
-          id: fetchedUser.id,
+          id: fetchedUser._id,
           name: fetchedUser.name,
           email: fetchedUser.email,
-          message: "Signed in sucessfully",
+          createdAt: fetchedUser.createdAt,
+          updatedAt: fetchedUser.updatedAt,
           token: token,
         });
     } else {

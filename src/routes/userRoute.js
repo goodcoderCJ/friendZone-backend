@@ -5,19 +5,29 @@ import authMiddle from "../middleware/authMiddle.js";
 
 const router = express.Router();
 
-//@ create user route POST "/api/user"
+//@desc create user route 
+//@route POST "/api/users"
+//@access Public
 router.post("/", userController.createUser);
 
-//@ list all users route GET "/api/user"
+//@desc list all users 
+//@route route GET "/api/users"
+//@access Private
 router.get("/", authMiddle.userAuthorization, userController.listUsers);
 
-//@ get a single particular user GET "/api/user/:id"
+//@desc get a single particular user 
+//@route GET "/api/users/:id"
+//access Private
 router.get("/:id", authMiddle.userAuthorization, userController.getUser);
 
-//@ update a single particular user PUT "/api/user/:id"
-router.put("/:id", authMiddle.userAuthorization, userController.updateUser);
+//@desc update a single particular user 
+//@route PATCH "/api/users/:id"
+//@access Private
+router.patch("/:id", authMiddle.userAuthorization, userController.updateUser);
 
-//@ delete a single particular user DELETE "/api/user/:id"
+//@desc delete a single particular user 
+//@route DELETE "/api/users/:id"
+//@access Private
 router.delete("/:id", authMiddle.userAuthorization, userController.deleteUser);
 
 export default router;

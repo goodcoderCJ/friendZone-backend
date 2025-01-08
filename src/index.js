@@ -6,7 +6,8 @@ import cors from "cors";
 import compress from "compression";
 import errorHandler from "./middleware/errorMiddle.js";
 import usersRoute from "./routes/userRoute.js" ;
-import authRoute from "./routes/authRoute.js"
+import authRoute from "./routes/authRoute.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(cors());
 app.use(compress());
+app.use(cookieParser());
 //User API for user related functions CREATE,POST,PUT,DELETE
 app.use("/api/users",usersRoute);
 // USer API for authentication SIGNIN, SIGNOUT

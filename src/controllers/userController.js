@@ -72,21 +72,22 @@ const getUser = async (req, res) => {
 //update a user controller
 const updateUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const data = req.body;
     const { id } = req.params;
-    const currentUser = await User.findById(req.user._id);
 
-    if (currentUser._id.toString() !== id) {
-      return res
-        .status(401)
-        .json({ message: "You can only edit your own data" });
+    if (!data.name) {
+      return res.status(400).json({ message: "Name field must be filled" });
     }
 
-    const userUpdated = await User.findByIdAndUpdate(
-      id,
-      { name },
-      { new: true }
-    );
+    if (req.user.id.toString() !== id) {
+      res.status(401).json({ message: "You can only edit your own data" });
+    }
+    
+
+    const userUpdated = await User.findByIdAndUpdate(id, data, {
+      new: true,
+    }).select("-password");
+
     return res.status(200).json(userUpdated);
   } catch (err) {
     return res.status(400).json({ message: err.message });
@@ -95,14 +96,14 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
-    const currentUser = await User.findById(req.user._id);
 
-    if (currentUser._id.toString() !== id) {
+
+    if (req.user._id.toString() !== id) {
       return res
         .status(400)
         .json({ message: "You can only delete your own data" });
     }
-
+    
     await User.findByIdAndDelete(id);
     return res
       .status(200)
